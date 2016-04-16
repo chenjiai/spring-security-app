@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+	default-lazy-init="false">
+	<context:component-scan base-package="com.cja.app" />
+	<!-- Hibernate配置 -->
+    <bean id="sessionFactory" class="com.intensoft.dao.hibernate.AnnotationSessionFactoryBeanExt">
+        <property name="dataSource" ref="dataSource" />
+        <property name="namingStrategy">
+            <bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.InformixDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+        <property name="entityPackages">
+            <list>
+                <value>com.cja.app</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:advice id="advice" transaction-manager="transactionManager"/>
+	<bean id="configuration"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="placeholderPrefix">
+			<value>@[</value>
+		</property>
+		<property name="placeholderSuffix">
+			<value>]</value>
+		</property>
+		<property name="location">
+			<value>classpath:runtime.properties</value>
+		</property>
+		<property name="ignoreResourceNotFound">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="false">
+    	<property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
+		<property name="url"><value>jdbc:mysql://localhost:3306/security</value></property>
+		<property name="username"><value>root</value></property>
+		<property name="password"><value>root</value></property>
+	</bean>
+</beans>

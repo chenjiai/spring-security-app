@@ -9,6 +9,23 @@
 	<url>http://maven.apache.org</url>
 	<build>
 		<finalName>spring-security-app</finalName>
+		<defaultGoal>package</defaultGoal>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.**</include>
+				</includes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**/*.**</include>
+				</includes>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -134,9 +151,9 @@
 		<!--spring end -->
 		<!-- orm begin -->
 		<dependency>
-			<groupId>com.informix</groupId>
-			<artifactId>ifxjdbc</artifactId>
-			<version>3.0</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.25</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
